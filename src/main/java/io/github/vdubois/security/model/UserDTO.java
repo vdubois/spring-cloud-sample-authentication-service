@@ -1,4 +1,4 @@
-package io.github.vdubois.model;
+package io.github.vdubois.security.model;
 
 import lombok.Data;
 

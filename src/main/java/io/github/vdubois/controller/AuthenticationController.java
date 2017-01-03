@@ -1,12 +1,12 @@
 package io.github.vdubois.controller;
 
-import io.github.vdubois.jwt.JSONWebTokenProducerService;
-import io.github.vdubois.model.AuthTokenDTO;
-import io.github.vdubois.model.AuthTokenDetailsDTO;
-import io.github.vdubois.model.AuthenticationDTO;
-import io.github.vdubois.model.RoleDTO;
-import io.github.vdubois.model.UserDTO;
-import io.github.vdubois.service.UserManagementService;
+import io.github.vdubois.security.model.AuthTokenDTO;
+import io.github.vdubois.security.model.AuthTokenDetailsDTO;
+import io.github.vdubois.security.model.AuthenticationDTO;
+import io.github.vdubois.security.model.RoleDTO;
+import io.github.vdubois.security.model.UserDTO;
+import io.github.vdubois.security.service.JsonWebTokenService;
+import io.github.vdubois.security.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +27,12 @@ public class AuthenticationController {
 
     private UserManagementService userManagementService;
 
-    private JSONWebTokenProducerService jsonWebTokenProducerService;
+    private JsonWebTokenService jsonWebTokenService;
 
     @Autowired
-    public AuthenticationController(UserManagementService userManagementService, JSONWebTokenProducerService jsonWebTokenProducerService) {
+    public AuthenticationController(UserManagementService userManagementService, JsonWebTokenService jsonWebTokenService) {
         this.userManagementService = userManagementService;
-        this.jsonWebTokenProducerService = jsonWebTokenProducerService;
+        this.jsonWebTokenService = jsonWebTokenService;
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -59,7 +59,7 @@ public class AuthenticationController {
             authTokenDetailsDTO.setExpirationDate(buildExpirationDate());
 
             // Create auth token
-            String jwt = jsonWebTokenProducerService.createJsonWebToken(authTokenDetailsDTO);
+            String jwt = jsonWebTokenService.createJsonWebToken(authTokenDetailsDTO);
             authToken = new AuthTokenDTO();
             authToken.setToken(jwt);
         }

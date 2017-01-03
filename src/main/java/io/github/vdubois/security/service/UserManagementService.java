@@ -1,7 +1,7 @@
-package io.github.vdubois.service;
+package io.github.vdubois.security.service;
 
-import io.github.vdubois.model.RoleDTO;
-import io.github.vdubois.model.UserDTO;
+import io.github.vdubois.security.model.RoleDTO;
+import io.github.vdubois.security.model.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;

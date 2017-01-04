@@ -1,4 +1,4 @@
-package io.github.vdubois.security.config;
+package io.github.vdubois.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

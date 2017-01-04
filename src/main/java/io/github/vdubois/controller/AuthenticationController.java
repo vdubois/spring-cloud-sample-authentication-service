@@ -1,12 +1,12 @@
 package io.github.vdubois.controller;
 
-import io.github.vdubois.security.model.AuthTokenDTO;
-import io.github.vdubois.security.model.AuthTokenDetailsDTO;
-import io.github.vdubois.security.model.AuthenticationDTO;
-import io.github.vdubois.security.model.RoleDTO;
-import io.github.vdubois.security.model.UserDTO;
-import io.github.vdubois.security.service.JsonWebTokenService;
-import io.github.vdubois.security.service.UserManagementService;
+import io.github.vdubois.model.AuthTokenDTO;
+import io.github.vdubois.model.AuthTokenDetailsDTO;
+import io.github.vdubois.model.AuthenticationDTO;
+import io.github.vdubois.model.RoleDTO;
+import io.github.vdubois.model.UserDTO;
+import io.github.vdubois.service.JsonWebTokenService;
+import io.github.vdubois.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -3,8 +3,8 @@ package io.github.vdubois.controller;
 import io.github.vdubois.model.AuthTokenDTO;
 import io.github.vdubois.model.AuthTokenDetailsDTO;
 import io.github.vdubois.model.AuthenticationDTO;
-import io.github.vdubois.model.RoleDTO;
-import io.github.vdubois.model.UserDTO;
+import io.github.vdubois.model.Role;
+import io.github.vdubois.model.User;
 import io.github.vdubois.service.JsonWebTokenService;
 import io.github.vdubois.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,21 +39,20 @@ public class AuthenticationController {
         AuthTokenDTO authToken = null;
 
         // Authenticate the user
-        UserDTO userDTO = userManagementService.authenticateUser(
+        User user = userManagementService.authenticateUser(
                 authenticationDTO.getEmail(), authenticationDTO.getPassword());
         // TODO If authentication fails, return an unauthorized error code
 
-        if (userDTO != null) {
+        if (user != null) {
 
-            Collection<RoleDTO> roles = userManagementService.findAllRolesForUser(userDTO.getId());
-            List<String> roleNames = roles.stream()
-                    .map(RoleDTO::getName)
+            List<String> roleNames = user.getRoles().stream()
+                    .map(Role::getName)
                     .collect(Collectors.toList());
 
             // Build the AuthTokenDetailsDTO
             AuthTokenDetailsDTO authTokenDetailsDTO = new AuthTokenDetailsDTO();
-            authTokenDetailsDTO.setUserId("" + userDTO.getId());
-            authTokenDetailsDTO.setEmail(userDTO.getEmail());
+            authTokenDetailsDTO.setUserId("" + user.getId());
+            authTokenDetailsDTO.setEmail(user.getEmail());
             authTokenDetailsDTO.setRoleNames(roleNames);
             authTokenDetailsDTO.setExpirationDate(buildExpirationDate());
 

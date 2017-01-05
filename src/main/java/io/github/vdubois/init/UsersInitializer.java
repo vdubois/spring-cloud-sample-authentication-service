@@ -5,6 +5,7 @@ import io.github.vdubois.model.User;
 import io.github.vdubois.repository.RoleRepository;
 import io.github.vdubois.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 /**
  * Created by vdubois on 04/01/17.
  */
+@Component
 public class UsersInitializer implements CommandLineRunner {
 
     private UserRepository userRepository;
@@ -33,7 +35,8 @@ public class UsersInitializer implements CommandLineRunner {
                     User user = new User();
                     user.setEmail(userCaracteristics[0]);
                     user.setPassword(userCaracteristics[1]);
-                    user.setRoles(roleRepository.findByName(userCaracteristics[2].split("\\|")));
+                    user.setRoles(roleRepository.findByNameIn(
+                                    Arrays.asList(userCaracteristics[2].split("\\|"))));
                     userRepository.save(user);
                 }
         );

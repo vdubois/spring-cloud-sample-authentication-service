@@ -8,6 +8,8 @@ import io.github.vdubois.model.User;
 import io.github.vdubois.service.JsonWebTokenService;
 import io.github.vdubois.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,33 +37,32 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public AuthTokenDTO authenticate(@RequestBody AuthenticationDTO authenticationDTO) {
-        AuthTokenDTO authToken = null;
-
-        // Authenticate the user
+    public ResponseEntity<AuthTokenDTO> authenticate(@RequestBody AuthenticationDTO authenticationDTO) {
         User user = userManagementService.authenticateUser(
                 authenticationDTO.getEmail(), authenticationDTO.getPassword());
-        // TODO If authentication fails, return an unauthorized error code
-
         if (user != null) {
-
-            List<String> roleNames = user.getRoles().stream()
-                    .map(Role::getName)
-                    .collect(Collectors.toList());
-
-            // Build the AuthTokenDetailsDTO
-            AuthTokenDetailsDTO authTokenDetailsDTO = new AuthTokenDetailsDTO();
-            authTokenDetailsDTO.setUserId("" + user.getId());
-            authTokenDetailsDTO.setEmail(user.getEmail());
-            authTokenDetailsDTO.setRoleNames(roleNames);
-            authTokenDetailsDTO.setExpirationDate(buildExpirationDate());
-
-            // Create auth token
-            String jwt = jsonWebTokenService.createJsonWebToken(authTokenDetailsDTO);
-            authToken = new AuthTokenDTO();
-            authToken.setToken(jwt);
+            return new ResponseEntity<>(buildAuthenticationTokenFromUser(user), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
 
+    private AuthTokenDTO buildAuthenticationTokenFromUser(User user) {
+        AuthTokenDTO authToken;List<String> roleNames = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
+
+        // Build the AuthTokenDetailsDTO
+        AuthTokenDetailsDTO authTokenDetailsDTO = new AuthTokenDetailsDTO();
+        authTokenDetailsDTO.setUserId("" + user.getId());
+        authTokenDetailsDTO.setEmail(user.getEmail());
+        authTokenDetailsDTO.setRoleNames(roleNames);
+        authTokenDetailsDTO.setExpirationDate(buildExpirationDate());
+
+        // Create auth token
+        String jwt = jsonWebTokenService.createJsonWebToken(authTokenDetailsDTO);
+        authToken = new AuthTokenDTO();
+        authToken.setToken(jwt);
         return authToken;
     }
 

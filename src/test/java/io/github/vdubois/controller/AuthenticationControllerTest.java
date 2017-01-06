@@ -50,7 +50,7 @@ public class AuthenticationControllerTest {
                 .content("{}")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
 
     }
@@ -64,7 +64,7 @@ public class AuthenticationControllerTest {
                 .content("{\"email\":\"johndoe@gmail.com\", \"pass\": \"pass\"}")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isBadRequest())
                 .andExpect(content().string(""));
     }
 

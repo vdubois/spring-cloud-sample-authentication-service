@@ -125,6 +125,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.1.11</version>
+				<configuration>
+					<targetClasses>
+						<param>*.Authentication*</param>
+					</targetClasses>
+					<targetTests>
+						<param>*.Authentication*</param>
+					</targetTests>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
